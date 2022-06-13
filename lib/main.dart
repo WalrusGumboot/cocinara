@@ -24,14 +24,21 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'cocinara',
       theme: maakThemaAan(Brightness.dark),
-      home: const Wrapper()
+      home: const HomePagina(),
+      routes: {
+        "/kookboek/": (context) => const Kookboek(),
+        "/maaltijden/": (context) => const Maaltijdplanner(),
+        "/boodschappen/": (context) => const Boodschappenlijst(),
+      }
     );
   }
 }
 
 class MenuTile extends StatelessWidget {
   final String tekst;
-  const MenuTile(this.tekst, {Key? key}) : super(key: key);
+  final String doel;
+  const MenuTile(this.tekst, this.doel, {Key? key}) : super(key: key);
+
 
   @override
   Widget build(context) {
@@ -39,7 +46,7 @@ class MenuTile extends StatelessWidget {
       height: 80,
       child: Card(
         child: InkWell(
-          onTap: () {},
+          onTap: () {Navigator.of(context).pushNamed(doel);},
           child: Center(child: Text(tekst, style: Theme.of(context).textTheme.headline5)),
         ),
       ),
@@ -47,16 +54,9 @@ class MenuTile extends StatelessWidget {
   } 
 }
 
-class Wrapper extends StatefulWidget {
-  const Wrapper({Key? key}) : super(key: key);
+class HomePagina extends StatelessWidget {
+  const HomePagina({Key? key}) : super(key: key);
 
-  @override
-  WrapperState createState() {
-    return WrapperState();
-  }
-}
-
-class WrapperState extends State<Wrapper> {
   @override
   Widget build(context) {
     return Scaffold(
@@ -74,11 +74,77 @@ class WrapperState extends State<Wrapper> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            MenuTile("kookboek"),
-            MenuTile("maaltijdplanner"),
-            MenuTile("boodschappenlijst")
+            MenuTile("kookboek", "/kookboek/"),
+            MenuTile("maaltijdplanner", "/maaltijden/"),
+            MenuTile("boodschappenlijst", "/boodschappen/")
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Kookboek extends StatelessWidget {
+  const Kookboek({Key? key}) : super(key: key);
+
+  @override
+  Widget build(context) {
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+        ],
+        title: const Text("kookboek"),
+        centerTitle: true,
+      ),
+
+      body: const Padding(
+        padding: EdgeInsets.all(32.0),
+        child: Center(child: Text("hoi"),)
+      ),
+    );
+  }
+}
+
+class Maaltijdplanner extends StatelessWidget {
+  const Maaltijdplanner({Key? key}) : super(key: key);
+
+  @override
+  Widget build(context) {
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+        ],
+        title: const Text("maaltijdplanner"),
+        centerTitle: true,
+      ),
+
+      body: const Padding(
+        padding: EdgeInsets.all(32.0),
+        child: Center(child: Text("hoi 2"),)
+      ),
+    );
+  }
+}
+
+class Boodschappenlijst extends StatelessWidget {
+  const Boodschappenlijst({Key? key}) : super(key: key);
+
+  @override
+  Widget build(context) {
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+        ],
+        title: const Text("boodschappenlijst"),
+        centerTitle: true,
+      ),
+
+      body: const Padding(
+        padding: EdgeInsets.all(32.0),
+        child: Center(child: Text("hoi 3"),)
       ),
     );
   }
