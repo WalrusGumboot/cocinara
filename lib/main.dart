@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'maaltijdplanner.dart';
+import 'boodschappenlijstje.dart';
+import 'kookboek.dart';
+
 void main() {
+  // bestandenManager.setRecepten(
+  //   const [
+  //     Recept("Stoom", "Een drukkend gerecht", [Ingredient("Water", "ml", 100)], "Doe het water in een pan en kook het."),
+  //     Recept("Brood", "Eet het dagelijks!",   [
+  //       Ingredient("Volkorenbloem", "gram", 430),
+  //       Ingredient("Droge gist", "theelepels", 3),
+  //       Ingredient("Zout", "theelepels", 2),
+  //       Ingredient("Warm water", "ml", 360),
+  //     ], "Meng de ingrediënten.\nLaat rijzen.\nBak het brood.")
+  //   ]
+  // );
+
+  // bestandenManager.setBoodschappen([
+  //   Ingredient("Ham", "gram", 600)
+  // ]);
+
   runApp(const App());
 }
 
@@ -18,7 +38,6 @@ ThemeData maakThemaAan(Brightness helderheid) {
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,36 +46,39 @@ class App extends StatelessWidget {
       home: const HomePagina(),
       routes: {
         "/kookboek/": (context) => const Kookboek(),
-        "/maaltijden/": (context) => const Maaltijdplanner(),
-        "/boodschappen/": (context) => const Boodschappenlijst(),
+        "/maaltijdplanner/": (context) => const Maaltijdplanner(),
+        "/boodschappenlijstje/": (context) => const Boodschappenlijst(),
       }
     );
   }
 }
 
-class MenuTile extends StatelessWidget {
-  final String tekst;
-  final String doel;
-  const MenuTile(this.tekst, this.doel, {Key? key}) : super(key: key);
-
+class MenuItem extends StatelessWidget {
+  final String naam;
+  const MenuItem(this.naam, {Key? key}): super(key: key);
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 80,
       child: Card(
         child: InkWell(
-          onTap: () {Navigator.of(context).pushNamed(doel);},
-          child: Center(child: Text(tekst, style: Theme.of(context).textTheme.headline5)),
+          onTap: () {Navigator.of(context).pushNamed("/$naam/");},
+          child: Center(child: Text(naam, style: Theme.of(context).textTheme.headline5)),
         ),
       ),
     );
-  } 
+  }
 }
 
-class HomePagina extends StatelessWidget {
+class HomePagina extends StatefulWidget {
   const HomePagina({Key? key}) : super(key: key);
+  
+  @override
+  State<HomePagina> createState() => _HomePaginaState();
+}
 
+class _HomePaginaState extends State<HomePagina> {
   @override
   Widget build(context) {
     return Scaffold(
@@ -74,77 +96,11 @@ class HomePagina extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            MenuTile("kookboek", "/kookboek/"),
-            MenuTile("maaltijdplanner", "/maaltijden/"),
-            MenuTile("boodschappenlijst", "/boodschappen/")
+            MenuItem("kookboek"),
+            MenuItem("maaltijdplanner"),
+            MenuItem("boodschappenlijstje"),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class Kookboek extends StatelessWidget {
-  const Kookboek({Key? key}) : super(key: key);
-
-  @override
-  Widget build(context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
-        ],
-        title: const Text("kookboek"),
-        centerTitle: true,
-      ),
-
-      body: const Padding(
-        padding: EdgeInsets.all(32.0),
-        child: Center(child: Text("hoi"),)
-      ),
-    );
-  }
-}
-
-class Maaltijdplanner extends StatelessWidget {
-  const Maaltijdplanner({Key? key}) : super(key: key);
-
-  @override
-  Widget build(context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
-        ],
-        title: const Text("maaltijdplanner"),
-        centerTitle: true,
-      ),
-
-      body: const Padding(
-        padding: EdgeInsets.all(32.0),
-        child: Center(child: Text("hoi 2"),)
-      ),
-    );
-  }
-}
-
-class Boodschappenlijst extends StatelessWidget {
-  const Boodschappenlijst({Key? key}) : super(key: key);
-
-  @override
-  Widget build(context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
-        ],
-        title: const Text("boodschappenlijst"),
-        centerTitle: true,
-      ),
-
-      body: const Padding(
-        padding: EdgeInsets.all(32.0),
-        child: Center(child: Text("hoi 3"),)
       ),
     );
   }
