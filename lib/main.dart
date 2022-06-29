@@ -6,22 +6,6 @@ import 'boodschappenlijstje.dart';
 import 'kookboek.dart';
 
 void main() {
-  // bestandenManager.setRecepten(
-  //   const [
-  //     Recept("Stoom", "Een drukkend gerecht", [Ingredient("Water", "ml", 100)], "Doe het water in een pan en kook het."),
-  //     Recept("Brood", "Eet het dagelijks!",   [
-  //       Ingredient("Volkorenbloem", "gram", 430),
-  //       Ingredient("Droge gist", "theelepels", 3),
-  //       Ingredient("Zout", "theelepels", 2),
-  //       Ingredient("Warm water", "ml", 360),
-  //     ], "Meng de ingrediënten.\nLaat rijzen.\nBak het brood.")
-  //   ]
-  // );
-
-  // bestandenManager.setBoodschappen([
-  //   Ingredient("Ham", "gram", 600)
-  // ]);
-
   runApp(const App());
 }
 
@@ -60,7 +44,7 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 160,
       child: Card(
         child: InkWell(
           onTap: () {Navigator.of(context).pushNamed("/$naam/");},
