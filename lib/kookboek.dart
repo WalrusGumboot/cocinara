@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'defs.dart';
+import "boodschappenlijstje.dart";
 
 BestandenManager bestandenManager = BestandenManager();
 
@@ -66,6 +67,121 @@ Widget maakReceptPagina(BuildContext context, Recept recept) {
   );
 }
 
+class NieuwReceptDialoog extends StatefulWidget {
+  const NieuwReceptDialoog({Key? key}) : super(key: key);
+  
+  @override
+  State<NieuwReceptDialoog> createState() => NieuwReceptDialoogState();
+}
+
+class NieuwReceptDialoogState extends State<NieuwReceptDialoog> {
+
+  String receptNaam = "";
+  String receptBlurb = "";
+  List<Ingredient> receptIngredienten = [];
+  String receptBereiding = "";
+
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      title: const Text("Voeg nieuw recept toe"),
+      contentPadding: const EdgeInsets.all(24),
+      children: [
+        TextField(
+          decoration: InputDecoration(
+            hintText: "Naam van recept",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0))
+          ),
+          onChanged: (text) {setState(() {
+            receptNaam = text;
+          });},
+        ),
+        const SizedBox(height: 8.0,),
+        TextField(
+          decoration: InputDecoration(
+            hintText: "Korte beschrijving van recept",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0))
+          ),
+          onChanged: (text) {setState(() {
+            receptBlurb = text;
+          });},
+        ),
+        const SizedBox(height: 8.0,),
+        //todo: ingredientenlijst
+        Wrap(
+          children: List.generate(receptIngredienten.length + 1, (index) {
+            if (index == receptIngredienten.length) {
+              return ActionChip(
+                label: Text("voeg ingrediënt toe"),
+                onPressed: () async {
+                  Ingredient? mogelijkNieuwIngredient = await showDialog(
+                    context: context, 
+                    builder: (context) => const NieuwIngredientDialoog()) as Ingredient?;
+
+                  if (mogelijkNieuwIngredient != null) {
+                    receptIngredienten.add(mogelijkNieuwIngredient); //HANDMATIG TOEVOEGEN
+                    setState(() {
+                      receptIngredienten = receptIngredienten;
+                    });
+                  }
+                },
+              );
+            } else {
+              Ingredient i = receptIngredienten[index];
+              return Chip(
+                onDeleted: () {
+                  setState(() {
+                    receptIngredienten.remove(i);
+                  });
+                }, //todo
+                label: Text(i.naam),
+                
+              );
+            }
+          })
+        ),
+        const SizedBox(height: 8.0,),
+        TextField(
+          minLines: 3,
+          maxLines: 8,
+          decoration: InputDecoration(
+            hintText: "Bereiding",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(4.0))
+          ),
+          onChanged: (text) {setState(() {
+            receptBereiding = text;
+          });},
+        ),
+        const SizedBox(height: 8.0,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, null);
+              }, 
+              child: const Text("Annuleer")
+            ),
+            const SizedBox(width: 8.0,),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, Recept(
+                  receptNaam,
+                  receptBlurb,
+                  receptIngredienten,
+                  receptBereiding
+                ));
+              },
+              child: const Text("Voeg toe")
+            ),
+          ]
+        )
+      ],
+    );
+  }
+}
+
 class Kookboek extends StatelessWidget {
   const Kookboek({Key? key}) : super(key: key);
 
@@ -82,7 +198,22 @@ class Kookboek extends StatelessWidget {
         title: const Text("kookboek"),
         centerTitle: true,
       ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.library_add),
+        onPressed: () async {
+          Recept? nieuwReceptData = await showDialog(
+            context: context, 
+            builder: (context) => const NieuwReceptDialoog()) as Recept?;
+          
+          if (nieuwReceptData != null) {
+            List<Recept> recepten = await bestandenManager.getRecepten();
+            recepten.add(nieuwReceptData);
+            bestandenManager.setRecepten(recepten);
 
+            Navigator.popAndPushNamed(context, "/kookboek/");
+          }
+        },
+      ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: FutureBuilder(

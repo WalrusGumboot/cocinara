@@ -143,7 +143,7 @@ class Boodschappenlijst extends StatelessWidget {
 
           if (mogelijkNieuwIngredient != null) {
             List<Ingredient> huidigeLijst = await bestandenManager.getBoodschappen();
-            huidigeLijst.addAll([mogelijkNieuwIngredient]); //HANDMATIG TOEVOEGEN
+            huidigeLijst.add(mogelijkNieuwIngredient); //HANDMATIG TOEVOEGEN
             bestandenManager.setBoodschappen(huidigeLijst);
 
             Navigator.popAndPushNamed(context, "/boodschappenlijstje/");
